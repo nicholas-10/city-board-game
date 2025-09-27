@@ -15,13 +15,13 @@ function love.load()
     gStateMachine = StateMachine{
         ['start'] = function () return StartState() end,
         ['play'] = function () return PlayState() end,
-        ['end'] = function () return EndState() end
+        ['end'] = function () return EndState() end,
     }
-    gStateMachine:change('start')
+    gStateMachine:change('play')
 
-    
     love.keyboard.keypressed = {}
 end
+
 function love.update(dt)
     if love.keyboard.wasPressed('escape') then
         love.event.quit()
@@ -33,21 +33,24 @@ function love.update(dt)
     gStateMachine:update(dt)
     love.keyboard.keypressed = {}
 end
+
 function love.resize(w, h)
     return push:resize(w, h)
   end
+
 function love.keypressed(key)
     love.keyboard.keypressed[key] = true
 end
+
 function love.keyboard.wasPressed(key)
     return love.keyboard.keypressed[key]
 end
+
 function love.draw()
     push:start()
     
     --draw here
-    love.graphics.setColor(0.3, 0.45, 0.7)
-    love.graphics.rectangle("fill", x, y, w, h)
+
     gStateMachine:render()
     push:finish()
 end
